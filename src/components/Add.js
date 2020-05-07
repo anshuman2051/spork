@@ -1,77 +1,38 @@
 import React from 'react';
+
 import classes from './Add.module.css'
 import {Card, CardContent, Grid,CardActions} from "@material-ui/core";
-import Input from './FormUI/Input';
-import Button from './FormUI/Button';
+import FormElements from './FormUI/formElements';
 
 class Add extends React.Component {
-    state = {
-        eleConfig :{
-          name: {
-            type: "text",
-            value: "",
-            placeholder: "enter value",
-            required: true,
-            isvalid: false
-            } ,
-            email :{
-                type: "email",
-                value: '',
-                placeholder: "enter email",
-                required: true,
-                isvalid: false
-            },
-            button :{
-                isvalid: true
-            }
-        }
-    };
 
-    clickHandler = ()=>{
+    clickHandler = (e)=>{
         //checking for form validity
-        let formIsValid = true;
-        for( let val in this.state.eleConfig){
-            formIsValid = this.state.eleConfig[val].isvalid && formIsValid;
-        }
-        if(formIsValid){
-            alert("submitted form successfully");
-        }
-        else{
-            alert('invalid form value should be greater than 5');
-        }
+        // e.preventDefault();
+        alert("submitted form successfully");
     }
-    onChangeHandler =(evt, identifier)=>{
-        let prevEle = {...this.state.eleConfig};
-        prevEle[identifier].value = evt.target.value;
 
-        //custom validation
-        if(prevEle[identifier].value.length > 5){
-            prevEle[identifier].isvalid= true;
-        }
-        else{
-            prevEle[identifier].isvalid= true;
-        }
-        this.setState({eleConfig: prevEle});
-    }
     render(){
         //element config
-
+        const inputEle= [];
+        for ( let keys in this.props){
+            inputEle.push(<FormElements key={keys} config={this.props[keys]}/>);
+        } 
         return(
-            <div className={classes.Add}>
+            <div className={classes.Add} >
                 <Card square style={{maxWidth:"50vh"}}>
                 <CardContent>
                     <Grid container direction="column">
-                        <Input  value={this.state.eleConfig.name.value} changed={(evt)=>this.onChangeHandler(evt,"name")} config={this.state.eleConfig.name}/>
-                        <Input  value={this.state.eleConfig.email.value} changed={(evt)=>this.onChangeHandler(evt,"email")} config={this.state.eleConfig.email}/>
+                        
+                        <form onSubmit={this.clickHandler} action="submit">
+                            {inputEle}
+                        </form>
                     </Grid>
                 </CardContent>
                 <CardActions>
-                    <Button clicked={this.clickHandler}>
-                        Log in
-                    </Button>
                 </CardActions>
                 </Card>
-            </div>
+            </div >
         );
     }
 }
